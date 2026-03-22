@@ -5,9 +5,10 @@ import { getSnippets, deleteSnippet } from "../services/snippetService"
 type SnippetListProps = {
   snippets: any[]
   setSnippets: React.Dispatch<React.SetStateAction<any[]>>
+  onEdit: (id: string) => void
 }
 
-function SnippetList({ snippets, setSnippets }: SnippetListProps) {
+function SnippetList({ snippets, setSnippets, onEdit }: SnippetListProps) {
 
   const [loading, setLoading] = useState(true)
 
@@ -51,10 +52,9 @@ function SnippetList({ snippets, setSnippets }: SnippetListProps) {
       {snippets.map((snippet) => (
         <SnippetItem
           key={snippet._id}
-          id={snippet._id}
-          title={snippet.title}
-          code={snippet.code}
+          snippet={snippet}
           onDelete={handleDelete}
+          onEdit={onEdit}
         />
       ))}
     </div>

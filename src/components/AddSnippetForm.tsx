@@ -1,12 +1,16 @@
-import { useState } from "react"
-import { createSnippet } from "../services/snippetService"
+  import { useState, useEffect } from "react"
+  import { createSnippet, updateSnippet } from "../services/snippetService"
 
 type AddSnippetFormProps = {
   setSnippets: React.Dispatch<React.SetStateAction<any[]>>
 //React.Dispatch<React.SetStateAction<any[]>>-פונקציה שמקבלת פרמטר ומפעילה פעולה עליו
+  editingSnippet: any | null
+  setEditingSnippet: (snippet: any | null) => void
 }
 
-function AddSnippetForm({ setSnippets }: AddSnippetFormProps) {
+
+
+function AddSnippetForm({ setSnippets, editingSnippet, setEditingSnippet }: AddSnippetFormProps) {
 
   const [title, setTitle] = useState("")
   const [code, setCode] = useState("")
@@ -22,16 +26,42 @@ function AddSnippetForm({ setSnippets }: AddSnippetFormProps) {
       description
     }
   
-    const response = await createSnippet(newSnippet)
+    if (editingSnippet) {
   
-    setSnippets((prev) => [...prev, response.data])
+      const response = await updateSnippet(editingSnippet._id, newSnippet)
+  
+      setSnippets(prev =>
+        prev.map(snippet =>
+          snippet._id === editingSnippet._id
+            ? response.data
+            : snippet
+        )
+      )
+  
+      setEditingSnippet(null)
+  
+    } else {
+  
+      const response = await createSnippet(newSnippet)
+  
+      setSnippets(prev => [...prev, response.data])
+  
+    }
   
     setTitle("")
     setCode("")
     setLanguage("")
     setDescription("")
   }
-  
+  useEffect(() => {
+    if (editingSnippet) {
+      setTitle(editingSnippet.title)
+      setCode(editingSnippet.code)
+      setLanguage(editingSnippet.language)
+      setDescription(editingSnippet.description)
+   
+    }
+  }, [editingSnippet]);
 
   return (
     <form
@@ -76,6 +106,16 @@ function AddSnippetForm({ setSnippets }: AddSnippetFormProps) {
       >
         Add Snippet
       </button>
+
+      <button
+        type="button"
+        onClick={() => setEditingSnippet(null)}
+        className="bg-red-600 text-white px-4 py-2 rounded"
+      >
+        Cancel
+      </button>
+
+    
 
     </form>
   )
