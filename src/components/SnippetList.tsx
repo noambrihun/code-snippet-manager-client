@@ -26,7 +26,11 @@ function SnippetList() {
       </h2>
 
       {snippets.map((snippet) => (
-        <SnippetItem key={snippet._id} />
+        <SnippetItem
+         key={snippet._id}
+         title={snippet.title}
+         code={snippet.code}
+         />
       ))}
 
     </div>
