@@ -1,23 +1,20 @@
-import { useEffect, useState } from "react"
 import SnippetItem from "./SnippetItem"
-import { getSnippets } from "../services/snippetService"
+import { deleteSnippet } from "../services/snippetService"
+type SnippetListProps = {
+  snippets: any[]
+  setSnippets: React.Dispatch<React.SetStateAction<any[]>>
+}
 
-function SnippetList() {
+function SnippetList({ snippets, setSnippets }: SnippetListProps) {
+  const handleDelete = async (id: string) => {
 
-  const [snippets, setSnippets] = useState<any[]>([])
-
-  useEffect(() => {
-
-    const fetchSnippets = async () => {
-      const data = await getSnippets()
-      console.log(data)
-      setSnippets(data.data)
-    }
-
-    fetchSnippets()
-
-  }, [])
-
+    await deleteSnippet(id)
+  
+    setSnippets(prev =>
+      prev.filter(snippet => snippet._id !== id)
+    )
+  
+  }
   return (
     <div className="space-y-4">
 
@@ -27,13 +24,15 @@ function SnippetList() {
 
       {snippets.map((snippet) => (
         <SnippetItem
-         key={snippet._id}
-         title={snippet.title}
-         code={snippet.code}
-         />
+          key={snippet._id}
+          title={snippet.title}
+          code={snippet.code}
+          id={snippet._id}
+          onDelete={() => handleDelete(snippet._id)}
+        />
       ))}
 
-    </div>
+      </div>
   )
 }
 

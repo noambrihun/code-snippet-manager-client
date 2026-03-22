@@ -1,25 +1,36 @@
 import { useState } from "react"
 import { createSnippet } from "../services/snippetService"
 
-function AddSnippetForm() {
+type AddSnippetFormProps = {
+  setSnippets: React.Dispatch<React.SetStateAction<any[]>>
+//React.Dispatch<React.SetStateAction<any[]>>-פונקציה שמקבלת פרמטר ומפעילה פעולה עליו
+}
+
+function AddSnippetForm({ setSnippets }: AddSnippetFormProps) {
 
   const [title, setTitle] = useState("")
   const [code, setCode] = useState("")
   const [language, setLanguage] = useState("")
   const [description, setDescription] = useState("")
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-   const newSnippet = {
-    title,
-    code,
-    language,
-    description
-   }
-   await createSnippet(newSnippet)
-   console.log("Snippet created successfully")
+  
+    const newSnippet = {
+      title,
+      code,
+      language,
+      description
     }
+  
+    const response = await createSnippet(newSnippet)
+  
+    setSnippets((prev) => [...prev, response.data])
+  
+    setTitle("")
+    setCode("")
+    setLanguage("")
+    setDescription("")
+  }
   
 
   return (

@@ -21,3 +21,14 @@ export const createSnippet = async (snippet: any) => {
 
   return data
 }
+
+export const deleteSnippet = async (id: string) => {
+
+  const response = await fetch(`http://localhost:3000/api/snippets/${id}`, {
+    method: "DELETE"
+  })
+
+  const data = await response.json()
+
+  return data
+}
