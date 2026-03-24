@@ -26,12 +26,20 @@ function SnippetList({ snippets, setSnippets, onEdit }: SnippetListProps) {
 
     fetchSnippets()
   }, [])
-
   const handleDelete = async (id: string) => {
-    await deleteSnippet(id)
-    setSnippets(prev =>
-      prev.filter(snippet => snippet._id !== id)
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this snippet?"
     )
+  
+    if (!confirmDelete) {
+      return
+    }else{
+      await deleteSnippet(id)
+      setSnippets(prev =>
+        prev.filter(snippet => snippet._id !== id)
+      )
+    }
   }
 
   // מצב טעינה

@@ -4,7 +4,7 @@ interface SnippetItemProps {
   onEdit: (snippet: any) => void
 }
 function SnippetItem({ snippet, onDelete, onEdit }: SnippetItemProps) {
-  const { title, code, id } = snippet
+  const { title, code, _id } = snippet
   return (
     <div className="bg-slate-500 p-4 rounded">
       <h3 className="text-lg font-bold text-white">{title}</h3>
@@ -22,7 +22,7 @@ function SnippetItem({ snippet, onDelete, onEdit }: SnippetItemProps) {
         </button>
 
         <button
-          onClick={() => onDelete(id)}
+          onClick={() => onDelete(_id)}
           className="bg-red-500 px-3 py-1 rounded"
         >
           Delete
